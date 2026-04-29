@@ -1,0 +1,11 @@
+duckdb
+faker
+great_expectations
+mlflow
+pandas
+plotly
+pytest
+python-docx
+python-pptx
+streamlit
+xlsxwriter

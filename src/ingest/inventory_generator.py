@@ -1,0 +1,1 @@
+"""Synthetic inventory data generation."""

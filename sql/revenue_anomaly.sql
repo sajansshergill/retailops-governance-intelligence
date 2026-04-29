@@ -1,0 +1,1 @@
+-- DuckDB query for revenue anomaly analysis.

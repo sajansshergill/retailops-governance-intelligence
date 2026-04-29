@@ -1,0 +1,1 @@
+"""PPTX executive summary builder."""

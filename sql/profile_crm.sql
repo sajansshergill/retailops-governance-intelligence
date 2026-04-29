@@ -1,0 +1,1 @@
+-- DuckDB profiling query for CRM data.

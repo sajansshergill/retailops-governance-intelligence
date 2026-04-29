@@ -1,0 +1,1 @@
+-- DuckDB query for stockout risk analysis.
