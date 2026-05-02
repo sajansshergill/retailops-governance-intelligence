@@ -11,7 +11,6 @@ from dataclasses import dataclass
 from datetime import datetime
 
 import duckdb
-import mlflow
 import pandas as pd
 
 
@@ -209,10 +208,18 @@ def score_all_tables(
     results = []
     run_ts = run_name or f"quality_run_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
 
+    mlflow = None
     mlflow_run = None
     if log_to_mlflow:
-        mlflow.set_experiment("retailops_data_quality")
-        mlflow_run = mlflow.start_run(run_name=run_ts)
+        try:
+            import mlflow as mlflow_module
+
+            mlflow = mlflow_module
+            mlflow.set_experiment("retailops_data_quality")
+            mlflow_run = mlflow.start_run(run_name=run_ts)
+        except Exception as exc:
+            print(f"[Quality Scorer] MLflow logging disabled: {exc}")
+            log_to_mlflow = False
 
     for table in tables:
         print(f"[Quality Scorer] Scoring: {table}")
@@ -228,7 +235,7 @@ def score_all_tables(
         })
         print(f"  → Composite: {dims.composite}/100")
 
-        if log_to_mlflow and mlflow_run:
+        if log_to_mlflow and mlflow and mlflow_run:
             mlflow.log_metrics({
                 f"{table}_completeness": dims.completeness,
                 f"{table}_consistency": dims.consistency,
@@ -237,7 +244,7 @@ def score_all_tables(
                 f"{table}_composite": dims.composite,
             })
 
-    if log_to_mlflow and mlflow_run:
+    if log_to_mlflow and mlflow and mlflow_run:
         mlflow.end_run()
 
     return pd.DataFrame(results)
