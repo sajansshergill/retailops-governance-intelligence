@@ -2,10 +2,15 @@
 
 from __future__ import annotations
 
+import sys
 import tempfile
 from pathlib import Path
 
 import streamlit as st
+
+REPO_ROOT = Path(__file__).resolve().parents[3]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 
 from src.catalog.metadata_extractor import build_full_catalog
 from src.dashboard.data import build_demo_connection, table_columns
